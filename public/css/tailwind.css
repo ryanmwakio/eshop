@@ -1,0 +1,16 @@
+/* ./your-css-folder/styles.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.card {
+  @apply pb-3 shadow-md rounded-sm hover:shadow-lg;
+}
+
+.navbar-active {
+  @apply bg-purple-700 text-white shadow-md;
+}
+
+.navlink {
+  @apply bg-white font-medium text-purple-700 text-sm border border-purple-700 p-2 shadow-sm capitalize rounded-md hover:bg-purple-700 hover:text-white;
+}

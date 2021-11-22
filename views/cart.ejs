@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <title><%= title %></title>
+  </head>
+  <body class="bg-white">
+    <%- include('includes/navbar') %>
+
+    <main class="mx-12 my-2">
+      <% if(products.length>0){ %>
+      <h1 class="text-purple-700 m-3 uppercase border-b border-gray-300 pb-3">
+        The Cart
+        <div
+          class="
+            inline-block
+            p-2
+            bg-gray-200
+            rounded-md
+            text-sm
+            capitalize
+            my-2
+          "
+        >
+          Total Cost:
+          <span class="border-b border-purple-700 pb-2"
+            >Kshs <%= totalCost %></span
+          >
+        </div>
+        <a
+          href="/create-order"
+          class="
+            bg-purple-700
+            text-white
+            inline-block
+            text-sm
+            capitalize
+            p-2
+            rounded-md
+            hover:shadow-md hover:bg-purple-800
+            my-2
+          "
+          >Order All</a
+        >
+        <a
+          href="remove-cart/randomId?removeAll=true"
+          class="
+            bg-purple-700
+            text-white
+            inline-block
+            text-sm
+            capitalize
+            p-2
+            rounded-md
+            hover:shadow-md hover:bg-purple-800
+            my-2
+          "
+          >Remove All Cart Items</a
+        >
+      </h1>
+
+      <div
+        class="w-full grid md:grid-cols-4 sm:grid-cols-2 xs:grid-cols-2 gap-6"
+      >
+        <% products.map(result=>{ %>
+        <div class="card">
+          <img
+            src="<%= result.product.imageUrl %> "
+            alt="product image"
+            class="overflow-hidden cursor-pointer h-48 w-screen object-cover"
+          />
+          <div class="p-3">
+            <p
+              class="text-gray-500 capitalize border-l-8 border-purple-600 pl-2"
+            >
+              <%= result.product.title %>
+            </p>
+            <p class="text-gray-700 border-l-8 pl-2 mb-3">
+              Kshs <%= result.product.price %>
+            </p>
+            <div>
+              <p
+                class="
+                  text-sm text-gray-500
+                  border-b border-gray-300
+                  p-3
+                  grid grid-cols-3
+                "
+              >
+                Quantity: <span><%= result.quantity %> </span
+                ><span
+                  ><a
+                    href="/add-cart/<%= result.product.id %> "
+                    class="flex justify-center align-middle"
+                    title="increase quantity"
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5 shadow-md text-purple-700"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M5 15l7-7 7 7"
+                      /></svg></a
+                ></span>
+              </p>
+              <p
+                class="text-sm text-gray-500 border-b border-gray-300 p-3 mb-4"
+              >
+                Cost: Kshs <%= result.quantity*result.product.price %>
+              </p>
+              <a
+                href="remove-cart/<%= result.product.id %> "
+                class="
+                  text-sm
+                  p-2
+                  bg-red-100
+                  mt-3
+                  capitalize
+                  shadow-sm
+                  hover:bg-red-300
+                  rounded-sm
+                "
+                >Remove From Cart</a
+              >
+              <a
+                href="/get-product/<%= result.product.id %> "
+                class="text-sm p-2 bg-purple-200 hover:bg-purple-300"
+                >product details</a
+              >
+            </div>
+          </div>
+        </div>
+        <% }) }else{ %>
+        <p class="uppercase text-purple-700 text-center">No products found</p>
+        <div class="flex justify-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 m-3 text-purple-700"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
+            />
+          </svg>
+        </div>
+        <% } %>
+      </div>
+    </main>
+  </body>
+</html>

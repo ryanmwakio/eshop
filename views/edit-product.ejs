@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <title><%= product.title %></title>
+  </head>
+  <body>
+    <%- include('includes/navbar') %>
+    <main>
+      <div class="grid sm:grid-cols-2 gap-2 md:mx-28 mx-10 my-6">
+        <div class="card">
+          <img
+            src="<%= product.imageUrl %> "
+            alt=""
+            class="w-screen h-56 object-cover"
+          />
+          <div class="border-b border-gray-400 p-3 m-2">
+            <p><%= product.title %></p>
+          </div>
+          <div class="border-b border-gray-400 p-3 m-2">
+            <p>Price: Kshs <%= product.price %></p>
+          </div>
+          <div class="border-b border-gray-400 p-3 m-2">
+            <p>Description: <%= product.description %></p>
+          </div>
+          <div class="border-b border-gray-400 p-3 m-2">
+            <p>
+              Created: <%= moment(product.createdAt).format('Do MMMM,YYYY') %>
+            </p>
+          </div>
+          <div class="border-b border-gray-400 p-3 m-2">
+            <p>
+              Updated: <%= moment(product.updatedAt).format('Do MMMM,YYYY') %>
+            </p>
+          </div>
+        </div>
+        <div class="card p-3 px-5">
+          <h4 class="uppercase text-purple-300">Edit Product:</h4>
+          <form action="/admin/edit-product/<%= product.id %> " method="post">
+            <input
+              type="text"
+              name="title"
+              id=""
+              class="
+                block
+                shadow-md
+                focus:shadow-lg
+                p-3
+                border-b border-purple-700
+                focus:border-purple-900 focus:outline-none
+                my-6
+                w-full
+                text-gray-400
+                focus:text-gray-700
+              "
+              value="<%= product.title %> "
+              required
+            />
+            <input
+              type="text"
+              name="imageUrl"
+              id=""
+              class="
+                block
+                shadow-md
+                focus:shadow-lg
+                p-3
+                border-b border-purple-700
+                focus:border-purple-900 focus:outline-none
+                my-6
+                w-full
+                text-gray-400
+                focus:text-gray-700
+              "
+              value="<%= product.imageUrl %> "
+              required
+            />
+            <input
+              type="text"
+              name="price"
+              id=""
+              class="
+                block
+                shadow-md
+                focus:shadow-lg
+                p-3
+                border-b border-purple-700
+                focus:border-purple-900 focus:outline-none
+                my-6
+                w-full
+                text-gray-400
+                focus:text-gray-700
+              "
+              value="<%= product.price %> "
+              required
+            />
+            <input
+              type="text"
+              name="description"
+              id=""
+              class="
+                block
+                shadow-md
+                focus:shadow-lg
+                p-3
+                border-b border-purple-700
+                focus:border-purple-900 focus:outline-none
+                my-6
+                w-full
+                text-gray-400
+                focus:text-gray-700
+              "
+              value="<%= product.description %> "
+              required
+            />
+            <button
+              class="p-3 bg-purple-700 rounded-sm text-white block w-full"
+            >
+              Edit
+            </button>
+          </form>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <title><%= product.title %></title>
+  </head>
+  <body>
+    <%- include('includes/navbar.ejs') %>
+    <div class="card mx-8 md:mx-40 mt-6">
+      <div>
+        <img
+          src="<%= product.imageUrl %> "
+          alt=""
+          class="h-80 w-screen object-cover rounded-t-md"
+        />
+      </div>
+      <div class="grid grid-cols-2">
+        <div class="bg-purple-600 p-2"></div>
+        <div class="bg-gray-300 p-2"></div>
+      </div>
+      <div class="p-3">
+        <div class="grid grid-cols-2">
+          <div>
+            <p
+              class="
+                text-purple-600
+                uppercase
+                text-sm
+                border-b border-gray-300
+                py-2
+              "
+            >
+              <%= product.title %>
+            </p>
+            <p class="text-sm text-gray-400 border-b border-gray-300 py-2">
+              Description: <%= product.description %>
+            </p>
+            <p class="text-sm text-gray-400 border-b border-gray-300 py-2 mb-2">
+              Price: Kshs <%= product.price %>
+            </p>
+            <a
+              href="/"
+              class="
+                py-1
+                px-2
+                capitalize
+                bg-gray-300
+                hover:bg-gray-400
+                text-purple-700 text-sm
+                rounded-sm
+                shadow-md
+              "
+              >Back</a
+            >
+
+            <a
+              href="/add-cart/<%= product.id %> "
+              class="
+                text-sm
+                py-1
+                px-2
+                bg-purple-600
+                hover:bg-purple-700
+                capitalize
+                text-white
+                rounded-sm
+                shadow-md
+                cursor-pointer
+              "
+              >Add to cart</a
+            >
+          </div>
+          <div class="flex justify-center align-middle">
+            <div class="p-2">
+              <a
+                href="/admin/edit-product/<%= product.id %>?edit=true"
+                class="
+                  block
+                  m-3
+                  p-2
+                  bg-green-400
+                  rounded-sm
+                  shadow-md
+                  hover:bg-green-500 hover:shadow-lg
+                  text-white text-sm
+                  w-20
+                  text-center
+                "
+                >Update</a
+              >
+
+              <form
+                action="/admin/delete-product/<%= product.id %> "
+                method="post"
+              >
+                <button
+                  type="submit "
+                  class="
+                    block
+                    m-3
+                    p-2
+                    bg-red-400
+                    rounded-sm
+                    shadow-md
+                    hover:bg-red-500 hover:shadow-lg
+                    text-white text-sm
+                    w-20
+                  "
+                >
+                  Delete
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

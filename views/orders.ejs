@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <title><%= title %></title>
+  </head>
+  <body>
+    <%- include("includes/navbar") %>
+    <main class="mx-5 my-5">
+      <div class="card p-3">
+        <div class="border-b border-gray-300 py-2 grid grid-cols-2 md:grid-cols-12 ">
+          <h1 class="text-purple-700">
+            All Orders <span class="font-bold">(<%= orders.length %>)</span>
+          </h1>
+          <a href="/clear-orders" class=" bg-red-200 px-2 py-1 rounded-sm inline-block">clear orders</a>
+        </div>
+        <div><% if(orders.length===0){ %>
+          <p class="uppercase text-purple-700 p-3">No orders</p>
+        <% } %> </div>
+        <% orders.map(items=>{ %>
+        <div
+          class="
+            my-2
+            border border-gray-300
+            rounded-md
+            p-3
+            grid grid-cols-2 md:grid-cols-4
+            gap-2
+          "
+        >
+          <% items.products.map(product=>{ %>
+          <div>
+            <div class="card my-2">
+              <img
+                src="<%= product.product.imageUrl %> "
+                class="h-20 w-screen object-cover"
+                alt=""
+              />
+              <div class="p-2">
+                <p class="border-b border-gray-300 p-1 text-sm">
+                  Name:
+                  <span class="text-purple-700"
+                    ><%= product.product.title %></span
+                  >
+                </p>
+                <p class="border-b border-gray-300 p-1 text-sm">
+                  Price:
+                  <span class="text-purple-700"
+                    >Kshs <%= product.product.price %></span
+                  >
+                </p>
+               
+                </p>
+              </div>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+        <% }) %>
+      </div>
+    </main>
+  </body>
+</html>

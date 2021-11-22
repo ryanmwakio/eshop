@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <title><%= title %></title>
+  </head>
+  <body>
+    <%- include('includes/navbar') %>
+    <main class="mx-12 mt-4">
+      <div>
+        <form action="/admin/product" method="post">
+          <input
+            type="text"
+            name="title"
+            id=""
+            class="
+              border-b border-r-8 border-purple-700
+              p-2
+              text-sm
+              my-2
+              shadow-md
+              w-full
+              md:w-auto
+              focus:border-purple-700 focus:outline-none focus:shadow-lg
+            "
+            placeholder="Enter product name"
+          />
+          <input
+            type="number"
+            name="price"
+            id=""
+            class="
+              border-b border-r-8 border-purple-700
+              my-2
+              p-2
+              text-sm
+              shadow-md
+              w-full
+              md:w-auto
+              focus:border-purple-700 focus:outline-none focus:shadow-lg
+            "
+            placeholder="Enter product price"
+          />
+          <input
+            type="text"
+            name="description"
+            id=""
+            class="
+              border-b border-r-8 border-purple-700
+              my-2
+              p-2
+              text-sm
+              shadow-md
+              w-full
+              md:w-auto
+              focus:border-purple-700 focus:outline-none focus:shadow-lg
+            "
+            placeholder="Enter product description"
+          />
+          <input
+            type="text"
+            name="imageUrl"
+            id=""
+            class="
+              border-b border-r-8 border-purple-700
+              my-2
+              p-2
+              text-sm
+              shadow-md
+              w-full
+              md:w-auto
+              focus:border-purple-700 focus:outline-none focus:shadow-lg
+            "
+            placeholder="Enter img url"
+          />
+
+          <button
+            type="submit"
+            class="
+              bg-purple-700
+              px-2
+              py-2
+              text-white text-sm
+              shadow-md
+              block
+              mt-2
+              md:mt-0 md:inline-block
+            "
+          >
+            Add Product
+          </button>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>
