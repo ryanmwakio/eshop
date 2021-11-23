@@ -3,10 +3,19 @@ const User = require("../models/User");
 const Order = require("../models/Order");
 
 exports.getAllProducts = (req, res, next) => {
+  let isLoggedIn = req.get("Cookie") ? req.get("Cookie").split("=")[1] : false;
+  isLoggedIn = Boolean(isLoggedIn);
+  console.log(isLoggedIn);
+
   Product.find()
     .populate("userId")
     .then((results) => {
-      res.render("shop", { title: "E-SHOP", products: results, path: "/" });
+      res.render("shop", {
+        title: "E-SHOP",
+        products: results,
+        path: "/",
+        isAuthenticated: isLoggedIn,
+      });
     })
     .catch((err) => {
       console.error(err);
@@ -14,6 +23,9 @@ exports.getAllProducts = (req, res, next) => {
 };
 
 exports.getProduct = (req, res, next) => {
+  let isLoggedIn = req.get("Cookie") ? req.get("Cookie").split("=")[1] : false;
+  isLoggedIn = Boolean(isLoggedIn);
+
   const productId = req.params.productId;
 
   Product.findById(productId)
@@ -21,6 +33,8 @@ exports.getProduct = (req, res, next) => {
       res.render("product-detail", {
         title: product.title,
         product: product,
+        isAuthenticated: isLoggedIn,
+        path: "/get-product",
       });
     })
     .catch((err) => {
@@ -57,10 +71,15 @@ exports.getCart = async (req, res, next) => {
     totalCost += asyncRes[i].product.price * asyncRes[i].quantity;
   }
 
+  let isLoggedIn = req.get("Cookie").split("=")[1];
+  isLoggedIn = Boolean(isLoggedIn);
+
   res.render("cart", {
     title: "Cart",
     products: asyncRes,
     totalCost: totalCost,
+    isAuthenticated: isLoggedIn,
+    path: "/cart",
   });
 };
 
@@ -140,6 +159,9 @@ exports.postOrder = (req, res, next) => {
 };
 
 exports.getOrders = (req, res, next) => {
+  let isLoggedIn = req.get("Cookie").split("=")[1];
+  isLoggedIn = Boolean(isLoggedIn);
+
   if (!req.user) {
     res.redirect("/");
   }
@@ -152,6 +174,7 @@ exports.getOrders = (req, res, next) => {
       path: "/orders",
       title: "All Orders",
       orders: orders,
+      isAuthenticated: isLoggedIn,
     });
   });
 };

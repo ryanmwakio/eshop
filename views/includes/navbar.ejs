@@ -22,13 +22,37 @@
         class="hidden md:flex px-4 mx-auto font-semibold font-heading space-x-3"
       >
         <li>
-          <a class="navlink" href="/">Home</a>
+          <a class="<%= path==='/' ? 'navbar-active' : 'navlink' %>" href="/"
+            >Home</a
+          >
         </li>
-        <li><a class="navlink" href="/orders">Orders</a></li>
-        <!-- <li><a class="navlink" href="/admin/add-product">Add Product</a></li> -->
+        <li>
+          <a
+            class="<%= path==='/orders' ? 'navbar-active' : 'navlink' %>"
+            href="/orders"
+            >Orders</a
+          >
+        </li>
+        <% if(isAuthenticated){ %>
+        <li>
+          <a
+            class="
+              <%=
+              path==='/admin/add-product'
+              ?
+              'navbar-active'
+              :
+              'navlink'
+              %>
+            "
+            href="/admin/add-product"
+            >Add Product</a
+          >
+        </li>
+        <% } %>
       </ul>
       <!-- Header Icons -->
-      <div class="hidden xl:flex items-center space-x-5 items-center">
+      <div class="hidden xl:flex space-x-5 items-center">
         <a
           class="flex items-center hover:text-purple-400 text-purple-700"
           href="/cart"

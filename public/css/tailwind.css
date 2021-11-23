@@ -8,7 +8,7 @@
 }
 
 .navbar-active {
-  @apply bg-purple-700 text-white shadow-md;
+  @apply bg-purple-700 text-white shadow-md rounded-md font-medium capitalize p-2;
 }
 
 .navlink {

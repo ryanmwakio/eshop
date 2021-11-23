@@ -2,8 +2,15 @@ const moment = require("moment");
 
 const Product = require("../models/Product");
 
-exports.getAddProduct = (re, res, next) => {
-  res.render("add-product", { title: "Add Product" });
+exports.getAddProduct = (req, res, next) => {
+  let isLoggedIn = req.get("Cookie") ? req.get("Cookie").split("=")[1] : false;
+  isLoggedIn = Boolean(isLoggedIn);
+
+  res.render("add-product", {
+    title: "Add Product",
+    isAuthenticated: isLoggedIn,
+    path: "/admin/add-product",
+  });
 };
 
 exports.postAddProduct = (req, res, next) => {
@@ -46,12 +53,18 @@ exports.getEditProduct = (req, res, next) => {
         res.redirect("/");
       }
 
+      let isLoggedIn = req.get("Cookie")
+        ? req.get("Cookie").split("=")[1]
+        : false;
+      isLoggedIn = Boolean(isLoggedIn);
+
       res.render("edit-product", {
         title: "Edit Product",
         path: "/admin/edit-product",
         editing: editMode,
         product: product,
         moment: moment,
+        isAuthenticated: isLoggedIn,
       });
     })
     .catch((err) => {

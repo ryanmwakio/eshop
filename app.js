@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 
 const adminRoutes = require("./routes/adminRoutes");
 const shopRoutes = require("./routes/shopRoutes");
+const authRoutes = require("./routes/auth");
 const User = require("./models/User");
 
 const app = express();
@@ -38,6 +39,7 @@ app.use((req, res, next) => {
     });
 });
 
+app.use(authRoutes);
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 
@@ -46,10 +48,10 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/name",(req,res,next)=>{
-    res.send("hello Ryan");
-    next();
-})
+app.use("/name", (req, res, next) => {
+  res.send("hello Ryan");
+  next();
+});
 
 app.all("*", (req, res, next) => {
   res.render("404", { title: "sorry page not found", path: null });
@@ -64,8 +66,8 @@ mongoose
   .then((result) => {
     console.log("connected");
 
-    app.listen(8082, () => {
-      console.log("server running at http://127.0.0.1:8082");
+    app.listen(8080, () => {
+      console.log("server running at http://127.0.0.1:8080");
     });
   })
   .catch((err) => {
