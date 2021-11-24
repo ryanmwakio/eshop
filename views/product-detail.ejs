@@ -75,6 +75,7 @@
           </div>
           <div class="flex justify-center align-middle">
             <div class="p-2">
+              <% if(isAuthenticated){ %>
               <a
                 href="/admin/edit-product/<%= product.id %>?edit=true"
                 class="
@@ -113,6 +114,7 @@
                   Delete
                 </button>
               </form>
+              <% } %>
             </div>
           </div>
         </div>

@@ -3,14 +3,15 @@ const moment = require("moment");
 const Product = require("../models/Product");
 
 exports.getAddProduct = (req, res, next) => {
-  let isLoggedIn = req.get("Cookie") ? req.get("Cookie").split("=")[1] : false;
-  isLoggedIn = Boolean(isLoggedIn);
-
-  res.render("add-product", {
-    title: "Add Product",
-    isAuthenticated: isLoggedIn,
-    path: "/admin/add-product",
-  });
+  if (req.session.isLoggedIn) {
+    res.render("add-product", {
+      title: "Add Product",
+      isAuthenticated: req.session.isLoggedIn,
+      path: "/admin/add-product",
+    });
+  } else {
+    res.redirect("/");
+  }
 };
 
 exports.postAddProduct = (req, res, next) => {
