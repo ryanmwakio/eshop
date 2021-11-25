@@ -3,15 +3,11 @@ const moment = require("moment");
 const Product = require("../models/Product");
 
 exports.getAddProduct = (req, res, next) => {
-  if (req.session.isLoggedIn) {
-    res.render("add-product", {
-      title: "Add Product",
-      isAuthenticated: req.session.isLoggedIn,
-      path: "/admin/add-product",
-    });
-  } else {
-    res.redirect("/");
-  }
+  res.render("add-product", {
+    title: "Add Product",
+    isAuthenticated: req.session.isLoggedIn,
+    path: "/admin/add-product",
+  });
 };
 
 exports.postAddProduct = (req, res, next) => {

@@ -3,13 +3,11 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 
 exports.getLogin = (req, res, next) => {
-  if (!req.session.isLoggedIn) {
-    res.render("auth/login", {
-      path: "/login",
-      title: "Login",
-      isAuthenticated: req.session.isLoggedIn,
-    });
-  }
+  res.render("auth/login", {
+    path: "/login",
+    title: "Login",
+    isAuthenticated: req.session.isLoggedIn,
+  });
 };
 
 exports.postLogin = (req, res, next) => {
@@ -45,11 +43,9 @@ exports.postLogin = (req, res, next) => {
 };
 
 exports.postLogout = (req, res, next) => {
-  if (req.session.isLoggedIn) {
-    req.session.destroy();
-    req.session = null;
-    res.redirect("/");
-  }
+  req.session.destroy();
+  req.session = null;
+  res.redirect("/");
 };
 
 exports.getRegister = (req, res, next) => {
