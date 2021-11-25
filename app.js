@@ -6,11 +6,12 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoDbStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
+const flash = require("connect-flash");
 
 const adminRoutes = require("./routes/adminRoutes");
 const shopRoutes = require("./routes/shopRoutes");
 const authRoutes = require("./routes/auth");
-const User = require("./models/User");
+const { truncate } = require("fs");
 
 const MONGODB_URL =
   "mongodb+srv://ryanmwakio:ngs%40ngo1620@cluster0.temth.mongodb.net/eshop?retryWrites=true&w=majority";
@@ -30,11 +31,12 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({
     secret: "my secret",
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
     store: store,
   })
 );
+
 app.use(csrfProtection);
 
 app.use((req, res, next) => {
@@ -48,6 +50,12 @@ app.use((req, res, next) => {
   res.locals.csrfToken = req.csrfToken();
   next();
 });
+
+app.use(flash());
+// app.use((req, res, next) => {
+//   req.flash("message", "Invalid email or password");
+//   next();
+// });
 
 app.use(authRoutes);
 app.use("/admin", adminRoutes);
