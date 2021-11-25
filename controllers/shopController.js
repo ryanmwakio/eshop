@@ -10,7 +10,6 @@ exports.getAllProducts = (req, res, next) => {
         title: "E-SHOP",
         products: results,
         path: "/",
-        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -26,7 +25,6 @@ exports.getProduct = (req, res, next) => {
       res.render("product-detail", {
         title: product.title,
         product: product,
-        isAuthenticated: req.session.isLoggedIn,
         path: "/get-product",
       });
     })
@@ -69,7 +67,6 @@ exports.getCart = async (req, res, next) => {
           title: "Cart",
           products: asyncRes,
           totalCost: totalCost,
-          isAuthenticated: req.session.isLoggedIn,
           path: "/cart",
         });
       }
@@ -176,7 +173,6 @@ exports.getOrders = (req, res, next) => {
       path: "/orders",
       title: "All Orders",
       orders: orders,
-      isAuthenticated: req.session.isLoggedIn,
     });
   });
 };

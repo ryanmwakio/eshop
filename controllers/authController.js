@@ -6,7 +6,6 @@ exports.getLogin = (req, res, next) => {
   res.render("auth/login", {
     path: "/login",
     title: "Login",
-    isAuthenticated: req.session.isLoggedIn,
   });
 };
 
@@ -51,7 +50,6 @@ exports.postLogout = (req, res, next) => {
 exports.getRegister = (req, res, next) => {
   res.render("auth/register", {
     path: "/register",
-    isAuthenticated: req.session.isLoggedIn,
   });
 };
 

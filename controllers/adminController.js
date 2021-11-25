@@ -5,7 +5,6 @@ const Product = require("../models/Product");
 exports.getAddProduct = (req, res, next) => {
   res.render("add-product", {
     title: "Add Product",
-    isAuthenticated: req.session.isLoggedIn,
     path: "/admin/add-product",
   });
 };
@@ -50,18 +49,12 @@ exports.getEditProduct = (req, res, next) => {
         res.redirect("/");
       }
 
-      let isLoggedIn = req.get("Cookie")
-        ? req.get("Cookie").split("=")[1]
-        : false;
-      isLoggedIn = Boolean(isLoggedIn);
-
       res.render("edit-product", {
         title: "Edit Product",
         path: "/admin/edit-product",
         editing: editMode,
         product: product,
         moment: moment,
-        isAuthenticated: isLoggedIn,
       });
     })
     .catch((err) => {
