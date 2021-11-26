@@ -33,6 +33,7 @@ exports.postAddProduct = (req, res, next) => {
     })
     .catch((err) => {
       console.error(err);
+      res.redirect("/500");
     });
 };
 
@@ -59,6 +60,7 @@ exports.getEditProduct = (req, res, next) => {
     })
     .catch((err) => {
       console.error(err);
+      res.redirect("/500");
     });
 };
 
@@ -86,6 +88,7 @@ exports.postEditProduct = (req, res, next) => {
     })
     .catch((err) => {
       console.error(err);
+      res.redirect("/500");
     });
 };
 
@@ -101,5 +104,6 @@ exports.postDeleteProduct = (req, res, next) => {
     })
     .catch((err) => {
       console.error(err);
+      res.redirect("/500");
     });
 };

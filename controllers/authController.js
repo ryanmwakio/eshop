@@ -2,7 +2,7 @@ const crypto = require("crypto");
 
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
-//const sendgridTransport = require("nodemailer-sendgrid-transport");
+const { validationResult } = require("express-validator/check");
 
 const User = require("../models/User");
 
@@ -19,12 +19,23 @@ exports.getLogin = (req, res, next) => {
     path: "/login",
     title: "Login",
     message: message,
+    oldInput: { email: "" },
   });
 };
 
 exports.postLogin = (req, res, next) => {
   let email = req.body.email;
   let password = req.body.password;
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).render("auth/login", {
+      path: "/login",
+      title: "Login",
+      message: errors.array()[0].msg,
+      oldInput: { email: email },
+    });
+  }
 
   User.findOne({ email: email }).then((user) => {
     if (!user) {
@@ -44,9 +55,10 @@ exports.postLogin = (req, res, next) => {
 
             req.session.save((err) => {
               console.error(err);
+              throw new Error();
             });
 
-            res.redirect("/");
+            res.status(422).redirect("/");
           }
         })
         .catch((err) => {
@@ -75,6 +87,7 @@ exports.getRegister = (req, res, next) => {
   res.render("auth/register", {
     path: "/register",
     message: message,
+    oldInput: { name: "", email: "" },
   });
 };
 
@@ -82,8 +95,16 @@ exports.postRegister = (req, res, next) => {
   const name = req.body.name;
   const email = req.body.email;
   const password = req.body.password;
-  const confirmPassword = req.body.confirmPassword;
   const role = 2;
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).render("auth/register", {
+      path: "/register",
+      message: errors.array()[0].msg,
+      oldInput: { name: name, email: email },
+    });
+  }
 
   User.find({ email: email })
     .then((userDoc) => {
@@ -178,6 +199,7 @@ exports.postRegister = (req, res, next) => {
     })
     .catch((err) => {
       console.error(err);
+      res.redirect("/500");
     });
 };
 
@@ -288,6 +310,7 @@ exports.postReset = (req, res, next) => {
       })
       .catch((err) => {
         console.error(err);
+        res.redirect("/500");
       });
   });
 };
@@ -329,6 +352,7 @@ exports.getNewPassword = (req, res, next) => {
       })
       .catch((err) => {
         console.error(err);
+        res.redirect("/500");
       });
   }
 };
@@ -354,5 +378,6 @@ exports.postNewPassword = (req, res, next) => {
     })
     .catch((err) => {
       console.error(err);
+      res.redirect("/500");
     });
 };

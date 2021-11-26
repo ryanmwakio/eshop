@@ -11,7 +11,7 @@ const flash = require("connect-flash");
 const adminRoutes = require("./routes/adminRoutes");
 const shopRoutes = require("./routes/shopRoutes");
 const authRoutes = require("./routes/auth");
-const { truncate } = require("fs");
+const errorController = require("./controllers/errorController");
 
 const MONGODB_URL =
   "mongodb+srv://ryanmwakio:ngs%40ngo1620@cluster0.temth.mongodb.net/eshop?retryWrites=true&w=majority";
@@ -62,6 +62,8 @@ app.use(authRoutes);
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 
+app.use("/500", errorController.error500);
+
 app.all("*", (req, res, next) => {
   let isLoggedIn = req.get("Cookie") ? req.get("Cookie").split("=")[1] : false;
   isLoggedIn = Boolean(isLoggedIn);
@@ -86,4 +88,5 @@ mongoose
   })
   .catch((err) => {
     console.error(err);
+    res.redirect("/500");
   });

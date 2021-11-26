@@ -14,6 +14,7 @@ exports.getAllProducts = (req, res, next) => {
     })
     .catch((err) => {
       console.error(err);
+      res.redirect("/500");
     });
 };
 
@@ -30,6 +31,7 @@ exports.getProduct = (req, res, next) => {
     })
     .catch((err) => {
       console.error(err);
+      res.redirect("/500");
     });
 };
 
@@ -121,6 +123,7 @@ exports.getRemoveFromCart = (req, res, next) => {
     })
     .catch((err) => {
       console.error(err);
+      res.redirect("/500");
     });
 };
 
@@ -157,6 +160,7 @@ exports.postOrder = (req, res, next) => {
     })
     .catch((err) => {
       console.error(err);
+      res.redirect("/500");
     });
 };
 

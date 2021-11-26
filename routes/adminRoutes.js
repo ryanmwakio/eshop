@@ -1,4 +1,5 @@
 const express = require("express");
+const { check } = require("express-validator/check");
 
 const adminController = require("../controllers/adminController");
 const isAuth = require("../middleware/is-auth");
@@ -8,7 +9,17 @@ const router = express.Router();
 
 router.get("/add-product", isAuth, isAdmin, adminController.getAddProduct);
 
-router.post("/product", isAuth, isAdmin, adminController.postAddProduct);
+router.post(
+  "/product",
+  [
+    check("title").isAlphanumeric().trim(),
+    check("price").isInt().trim(),
+    check("description").isAlphanumeric().trim(),
+  ],
+  isAuth,
+  isAdmin,
+  adminController.postAddProduct
+);
 
 router.get(
   "/edit-product/:productId",
