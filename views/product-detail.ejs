@@ -75,7 +75,7 @@
           </div>
           <div class="flex justify-center align-middle">
             <div class="p-2">
-              <% if(isAuthenticated){ %>
+              <% if(isAuthenticated && role===1){ %>
               <a
                 href="/admin/edit-product/<%= product.id %>?edit=true"
                 class="
