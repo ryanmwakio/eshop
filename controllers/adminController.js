@@ -1,6 +1,7 @@
 const moment = require("moment");
 
 const Product = require("../models/Product");
+const serverError = require("../middleware/server-error");
 
 exports.getAddProduct = (req, res, next) => {
   res.render("add-product", {
@@ -32,8 +33,7 @@ exports.postAddProduct = (req, res, next) => {
       res.redirect("/");
     })
     .catch((err) => {
-      console.error(err);
-      res.redirect("/500");
+      serverError(err, next);
     });
 };
 
@@ -59,8 +59,7 @@ exports.getEditProduct = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.error(err);
-      res.redirect("/500");
+      serverError(err, next);
     });
 };
 
@@ -87,8 +86,7 @@ exports.postEditProduct = (req, res, next) => {
       res.redirect("/");
     })
     .catch((err) => {
-      console.error(err);
-      res.redirect("/500");
+      serverError(err, next);
     });
 };
 
@@ -103,7 +101,6 @@ exports.postDeleteProduct = (req, res, next) => {
       res.redirect("/");
     })
     .catch((err) => {
-      console.error(err);
-      res.redirect("/500");
+      serverError(err, next);
     });
 };

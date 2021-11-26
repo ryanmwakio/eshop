@@ -1,6 +1,7 @@
 const Product = require("../models/Product");
 const User = require("../models/User");
 const Order = require("../models/Order");
+const serverError = require("../middleware/server-error");
 
 exports.getAllProducts = (req, res, next) => {
   Product.find()
@@ -13,8 +14,7 @@ exports.getAllProducts = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.error(err);
-      res.redirect("/500");
+      serverError(err, next);
     });
 };
 
@@ -30,8 +30,7 @@ exports.getProduct = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.error(err);
-      res.redirect("/500");
+      serverError(err, next);
     });
 };
 
@@ -42,35 +41,39 @@ exports.getCart = async (req, res, next) => {
     res.redirect("/");
   } else {
     User.findById(req.user._id).then(async (user) => {
-      const products = user.cart.items;
+      try {
+        const products = user.cart.items;
 
-      if (products.length === 0 || !products) {
-        res.redirect("/");
-      } else {
-        const asyncRes = await Promise.all(
-          products.map(async (productId) => {
-            let theProductId = await String(productId.productId);
-            let theProductQuantity = await Number(productId.quantity);
+        if (products.length === 0 || !products) {
+          res.redirect("/");
+        } else {
+          const asyncRes = await Promise.all(
+            products.map(async (productId) => {
+              let theProductId = await String(productId.productId);
+              let theProductQuantity = await Number(productId.quantity);
 
-            let product = await Product.findById(theProductId);
+              let product = await Product.findById(theProductId);
 
-            let newProduct = { product, quantity: theProductQuantity };
+              let newProduct = { product, quantity: theProductQuantity };
 
-            return newProduct;
-          })
-        );
+              return newProduct;
+            })
+          );
 
-        let totalCost = 0;
-        for (let i = 0; i < asyncRes.length; i++) {
-          totalCost += asyncRes[i].product.price * asyncRes[i].quantity;
+          let totalCost = 0;
+          for (let i = 0; i < asyncRes.length; i++) {
+            totalCost += asyncRes[i].product.price * asyncRes[i].quantity;
+          }
+
+          res.render("cart", {
+            title: "Cart",
+            products: asyncRes,
+            totalCost: totalCost,
+            path: "/cart",
+          });
         }
-
-        res.render("cart", {
-          title: "Cart",
-          products: asyncRes,
-          totalCost: totalCost,
-          path: "/cart",
-        });
+      } catch (err) {
+        serverError(err, next);
       }
     });
   }
@@ -90,8 +93,7 @@ exports.postCart = (req, res, next) => {
         });
       })
       .catch((err) => {
-        console.error(err);
-        res.redirect("/");
+        serverError(err, next);
       });
   }
 };
@@ -122,8 +124,7 @@ exports.getRemoveFromCart = (req, res, next) => {
       res.redirect("/cart");
     })
     .catch((err) => {
-      console.error(err);
-      res.redirect("/500");
+      serverError(err, next);
     });
 };
 
@@ -156,11 +157,13 @@ exports.postOrder = (req, res, next) => {
         })
         .then(() => {
           res.redirect("/orders");
+        })
+        .catch((err) => {
+          serverError(err, next);
         });
     })
     .catch((err) => {
-      console.error(err);
-      res.redirect("/500");
+      serverError(err, next);
     });
 };
 
@@ -168,17 +171,21 @@ exports.getOrders = (req, res, next) => {
   if (!req.user) {
     res.redirect("/");
   }
-  Order.find({ "user.userId": req.user._id }).then((orders) => {
-    if (!orders) {
-      res.redirect("/");
-    }
+  Order.find({ "user.userId": req.user._id })
+    .then((orders) => {
+      if (!orders) {
+        res.redirect("/");
+      }
 
-    res.render("orders", {
-      path: "/orders",
-      title: "All Orders",
-      orders: orders,
+      res.render("orders", {
+        path: "/orders",
+        title: "All Orders",
+        orders: orders,
+      });
+    })
+    .catch((err) => {
+      serverError(err, next);
     });
-  });
 };
 
 exports.clearOrders = (req, res, next) => {
@@ -186,5 +193,8 @@ exports.clearOrders = (req, res, next) => {
     .deleteMany()
     .then(() => {
       res.redirect("/");
+    })
+    .catch((err) => {
+      serverError(err, next);
     });
 };

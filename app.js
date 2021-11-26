@@ -53,15 +53,10 @@ app.use((req, res, next) => {
 });
 
 app.use(flash());
-// app.use((req, res, next) => {
-//   req.flash("message", "Invalid email or password");
-//   next();
-// });
 
 app.use(authRoutes);
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
-
 app.use("/500", errorController.error500);
 
 app.all("*", (req, res, next) => {
@@ -73,6 +68,10 @@ app.all("*", (req, res, next) => {
     path: null,
     isAuthenticated: isLoggedIn,
   });
+});
+
+app.use((error, req, res, next) => {
+  res.redirect("/500");
 });
 
 const devUrl = "mongodb://127.0.0.1:27017/eshop";

@@ -5,6 +5,7 @@ const nodemailer = require("nodemailer");
 const { validationResult } = require("express-validator/check");
 
 const User = require("../models/User");
+const serverError = require("../middleware/server-error");
 
 exports.getLogin = (req, res, next) => {
   let message = req.flash("message");
@@ -35,38 +36,38 @@ exports.postLogin = (req, res, next) => {
       message: errors.array()[0].msg,
       oldInput: { email: email },
     });
-  }
+  } else {
+    User.findOne({ email: email })
+      .then((user) => {
+        if (!user) {
+          req.flash("message", "Invalid email or password");
 
-  User.findOne({ email: email }).then((user) => {
-    if (!user) {
-      req.flash("message", "Invalid email or password");
-
-      res.redirect("/login");
-    } else {
-      bcrypt
-        .compare(password, user.password)
-        .then((doMatch) => {
-          if (!doMatch) {
-            req.flash("message", "Invalid email or password");
-            res.redirect("/login");
-          } else {
-            req.session.isLoggedIn = true;
-            req.session.user = user;
-
-            req.session.save((err) => {
-              console.error(err);
-              throw new Error();
-            });
-
-            res.status(422).redirect("/");
-          }
-        })
-        .catch((err) => {
-          console.error(err);
           res.redirect("/login");
-        });
-    }
-  });
+        } else {
+          bcrypt
+            .compare(password, user.password)
+            .then((doMatch) => {
+              if (!doMatch) {
+                req.flash("message", "Invalid email or password");
+                res.redirect("/login");
+              } else {
+                req.session.isLoggedIn = true;
+                req.session.user = user;
+
+                req.session.save();
+
+                res.status(422).redirect("/");
+              }
+            })
+            .catch((err) => {
+              res.redirect("/login");
+            });
+        }
+      })
+      .catch((err) => {
+        serverError(err, next);
+      });
+  }
 };
 
 exports.postLogout = (req, res, next) => {
@@ -198,8 +199,7 @@ exports.postRegister = (req, res, next) => {
       }
     })
     .catch((err) => {
-      console.error(err);
-      res.redirect("/500");
+      serverError(err, next);
     });
 };
 
@@ -223,7 +223,6 @@ exports.postReset = (req, res, next) => {
   let email = req.body.email;
   crypto.randomBytes(32, (err, buffer) => {
     if (err) {
-      console.error(err);
       res.redirect("/reset");
     }
     const token = buffer.toString("hex");
@@ -309,8 +308,7 @@ exports.postReset = (req, res, next) => {
         res.redirect("/reset");
       })
       .catch((err) => {
-        console.error(err);
-        res.redirect("/500");
+        serverError(err, next);
       });
   });
 };
@@ -351,8 +349,7 @@ exports.getNewPassword = (req, res, next) => {
         }
       })
       .catch((err) => {
-        console.error(err);
-        res.redirect("/500");
+        serverError(err, next);
       });
   }
 };
@@ -377,7 +374,6 @@ exports.postNewPassword = (req, res, next) => {
       res.redirect("/login");
     })
     .catch((err) => {
-      console.error(err);
-      res.redirect("/500");
+      serverError(err, next);
     });
 };
