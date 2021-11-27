@@ -13,7 +13,7 @@
       <div class="grid sm:grid-cols-2 gap-2 md:mx-28 mx-10 my-6">
         <div class="card">
           <img
-            src="<%= product.imageUrl %> "
+            src="/<%= product.imageUrl %> "
             alt=""
             class="w-screen h-56 object-cover"
           />
@@ -60,25 +60,59 @@
               value="<%= product.title %> "
               required
             />
-            <input
-              type="text"
-              name="imageUrl"
-              id=""
-              class="
-                block
-                shadow-md
-                focus:shadow-lg
-                p-3
-                border-b border-purple-700
-                focus:border-purple-900 focus:outline-none
-                my-6
-                w-full
-                text-gray-400
-                focus:text-gray-700
-              "
-              value="<%= product.imageUrl %> "
-              required
-            />
+            <div class="mb-2">
+              <span class="text-sm text-gray-400">Product Image</span>
+              <div
+                class="
+                  relative
+                  h-40
+                  rounded-none
+                  border-dashed border-2 border-purple-700
+                  bg-white
+                  flex
+                  justify-center
+                  items-center
+                  hover:cursor-pointer
+                "
+              >
+                <div class="absolute">
+                  <div class="flex flex-col items-center">
+                    <i class="fa fa-cloud-upload fa-3x text-gray-200"></i>
+                    <span class="block text-gray-400 font-normal"
+                      >Attach you files here</span
+                    >
+                    <span class="block text-gray-400 font-normal">or</span>
+                    <span class="block text-purple-700 font-normal"
+                      >Browse files</span
+                    >
+                  </div>
+                </div>
+                <input
+                  type="file"
+                  class="h-full w-full opacity-0"
+                  name="image"
+                />
+              </div>
+              <div class="flex justify-between items-center text-gray-400">
+                <span>Accepted file type:.jpg/.png only</span>
+                <span class="flex items-center"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                    /></svg
+                  >secure</span
+                >
+              </div>
+            </div>
             <input
               type="text"
               name="price"

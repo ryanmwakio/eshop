@@ -8,9 +8,9 @@
 }
 
 .navbar-active {
-  @apply bg-purple-700 text-white shadow-md rounded-md font-medium capitalize p-2;
+  @apply bg-purple-700 text-sm text-white   capitalize p-2;
 }
 
 .navlink {
-  @apply bg-white font-medium text-purple-700 text-sm border border-purple-700 p-2 shadow-sm capitalize rounded-md hover:bg-purple-700 hover:text-white;
+  @apply bg-white  text-purple-700 text-sm border border-purple-700 p-2  capitalize hover:bg-purple-700 hover:text-white;
 }

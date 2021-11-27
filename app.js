@@ -7,6 +7,8 @@ const session = require("express-session");
 const MongoDbStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
 const flash = require("connect-flash");
+const multer = require("multer");
+const { v4: uuidv4 } = require("uuid");
 
 const adminRoutes = require("./routes/adminRoutes");
 const shopRoutes = require("./routes/shopRoutes");
@@ -17,17 +19,50 @@ const MONGODB_URL =
   "mongodb+srv://ryanmwakio:ngs%40ngo1620@cluster0.temth.mongodb.net/eshop?retryWrites=true&w=majority";
 
 const app = express();
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "images")));
+
 const store = new MongoDbStore({
   uri: MONGODB_URL,
   collection: "sessions",
 });
 const csrfProtection = csrf();
 
+//multer filters and config
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+  },
+  filename: (req, file, cb) => {
+    let fileUniqueName = uuidv4();
+    let extensionArray = file.originalname.split(".");
+    let extension = extensionArray[extensionArray.length - 1];
+
+    cb(null, fileUniqueName + "." + extension);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+//multer filters and config end
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
+);
+
 app.use(
   session({
     secret: "my secret",
@@ -47,6 +82,7 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.username = req.user ? req.user.name : undefined;
   res.locals.csrfToken = req.csrfToken();
   res.locals.role = req.user ? req.user.role : 2;
   next();

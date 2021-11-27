@@ -2,7 +2,7 @@ const crypto = require("crypto");
 
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
-const { validationResult } = require("express-validator/check");
+const { validationResult } = require("express-validator");
 
 const User = require("../models/User");
 const serverError = require("../middleware/server-error");
@@ -122,21 +122,29 @@ exports.postRegister = (req, res, next) => {
             cart: { items: [] },
           });
 
-          user.save().then(() => {
-            const transporter = nodemailer.createTransport({
-              service: "hotmail",
-              auth: {
-                user: "ryanmwakio6@outlook.com",
-                pass: "HT7$gQ_k925",
-              },
-            });
+          user
+            .save()
+            .then((user) => {
+              req.session.isLoggedIn = true;
+              req.session.user = user;
 
-            const options = {
-              from: "ryanmwakio6@outlook.com",
-              to: email,
-              subject: "eshop registration confimation",
-              text: `Hello ${name} welcome to E-Shop, all shoping at your fingertips.`,
-              html: `<table class="body-wrap" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: #f6f6f6; margin: 0;" bgcolor="#f6f6f6">
+              req.session.save();
+            })
+            .then(() => {
+              const transporter = nodemailer.createTransport({
+                service: "hotmail",
+                auth: {
+                  user: "ryanmwakio6@outlook.com",
+                  pass: "HT7$gQ_k925",
+                },
+              });
+
+              const options = {
+                from: "ryanmwakio6@outlook.com",
+                to: email,
+                subject: "eshop registration confimation",
+                text: `Hello ${name} welcome to E-Shop, all shoping at your fingertips.`,
+                html: `<table class="body-wrap" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: #f6f6f6; margin: 0;" bgcolor="#f6f6f6">
     <tbody>
         <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
             <td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;" valign="top"></td>
@@ -184,17 +192,17 @@ exports.postRegister = (req, res, next) => {
         </tr>
     </tbody>
 </table>`,
-            };
+              };
 
-            transporter.sendMail(options, function (err, info) {
-              if (err) {
-                console.error(err);
-                return;
-              }
-              console.log("Sent: " + info.response);
+              transporter.sendMail(options, function (err, info) {
+                if (err) {
+                  console.error(err);
+                  return;
+                }
+                console.log("Sent: " + info.response);
+              });
+              res.redirect("/");
             });
-            res.redirect("/login");
-          });
         });
       }
     })

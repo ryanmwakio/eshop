@@ -100,6 +100,13 @@
         <% } %> <% if(!isAuthenticated){ %>
         <a href="/register" class="text-purple-700">signup</a>
         <% } %> <% if(isAuthenticated){ %>
+        <div>
+          <a
+            href=""
+            class="text-purple-700 text-sm p-1 border border-purple-700"
+            ><%= username %>
+          </a>
+        </div>
         <form action="/logout" method="post" class="flex items-center">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
           <button type="submit" class="cursor-pointer" title="logout">

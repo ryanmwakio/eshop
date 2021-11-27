@@ -1,40 +1,68 @@
+const { unlink } = require("fs");
+const path = require("path");
+
 const moment = require("moment");
 
 const Product = require("../models/Product");
 const serverError = require("../middleware/server-error");
+const rootDir = require("../util/path");
 
 exports.getAddProduct = (req, res, next) => {
+  let message = req.flash("message");
+
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
   res.render("add-product", {
     title: "Add Product",
     path: "/admin/add-product",
+    message: message,
+    oldInput: { title: "", price: "", description: "" },
   });
 };
 
 exports.postAddProduct = (req, res, next) => {
   const title = req.body.title;
-  const imageUrl = req.body.imageUrl;
+  const image = req.file;
   const price = req.body.price;
   const description = req.body.description;
-  if (!title || !imageUrl || !price || !description) {
-    res.redirect("/");
-  }
 
-  const product = new Product({
-    title: title,
-    imageUrl: imageUrl,
-    price: price,
-    description: description,
-    userId: req.user,
-  });
+  if (!title || !image || !price || !description) {
+    req.flash(
+      "message",
+      "ensure you have valid values for all fields and a correct image is selected."
+    );
 
-  product
-    .save()
-    .then((result) => {
-      res.redirect("/");
-    })
-    .catch((err) => {
-      serverError(err, next);
+    res.render("add-product", {
+      title: "Add Product",
+      path: "/admin/add-product",
+      message:
+        "ensure you have valid values for all fields and a correct image is selected.",
+      oldInput: { title: title, price: price, description: description },
     });
+  } else {
+    // const imageUrl = image.path;
+    const imageUrl = image.filename;
+
+    const product = new Product({
+      title: title,
+      imageUrl: imageUrl,
+      price: price,
+      description: description,
+      userId: req.user,
+    });
+
+    product
+      .save()
+      .then((result) => {
+        res.redirect("/");
+      })
+      .catch((err) => {
+        serverError(err, next);
+      });
+  }
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -70,14 +98,16 @@ exports.postEditProduct = (req, res, next) => {
   }
 
   const updatedTitle = req.body.title;
-  const updatedImgUrl = req.body.imageUrl;
+  const image = req.file;
   const updatedPrice = req.body.price;
   const updatedDescription = req.body.description;
 
   Product.findById(prodId)
     .then((product) => {
       product.title = updatedTitle;
-      product.imageUrl = updatedImgUrl;
+      if (image) {
+        product.imageUrl = image.filename;
+      }
       product.price = updatedPrice;
       product.description = updatedDescription;
       return product.save();
@@ -96,9 +126,23 @@ exports.postDeleteProduct = (req, res, next) => {
     res.redirect("/");
   }
 
-  Product.findByIdAndRemove(prodId)
-    .then((result) => {
-      res.redirect("/");
+  Product.findById(prodId)
+    .then((product) => {
+      const filePath = path.join(rootDir, "images", product.imageUrl);
+      console.log(filePath);
+
+      unlink(filePath, (err) => {
+        if (err) throw err;
+      });
+    })
+    .then(() => {
+      Product.findByIdAndRemove(prodId)
+        .then((result) => {
+          res.redirect("/");
+        })
+        .catch((err) => {
+          serverError(err, next);
+        });
     })
     .catch((err) => {
       serverError(err, next);
