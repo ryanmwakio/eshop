@@ -106,6 +106,11 @@ exports.postEditProduct = (req, res, next) => {
     .then((product) => {
       product.title = updatedTitle;
       if (image) {
+        // const filePath = path.join(rootDir, "images", product.imageUrl);
+        // unlink(filePath, (err) => {
+        //   if (err) throw err;
+        // });
+
         product.imageUrl = image.filename;
       }
       product.price = updatedPrice;
@@ -129,7 +134,6 @@ exports.postDeleteProduct = (req, res, next) => {
   Product.findById(prodId)
     .then((product) => {
       const filePath = path.join(rootDir, "images", product.imageUrl);
-      console.log(filePath);
 
       unlink(filePath, (err) => {
         if (err) throw err;

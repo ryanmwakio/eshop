@@ -17,13 +17,14 @@ const errorController = require("./controllers/errorController");
 
 const MONGODB_URL =
   "mongodb+srv://ryanmwakio:ngs%40ngo1620@cluster0.temth.mongodb.net/eshop?retryWrites=true&w=majority";
+const devUrl = "mongodb://127.0.0.1:27017/eshop";
 
 const app = express();
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "images")));
 
 const store = new MongoDbStore({
-  uri: MONGODB_URL,
+  uri: devUrl,
   collection: "sessions",
 });
 const csrfProtection = csrf();
@@ -110,10 +111,8 @@ app.use((error, req, res, next) => {
   res.redirect("/500");
 });
 
-const devUrl = "mongodb://127.0.0.1:27017/eshop";
-
 mongoose
-  .connect(MONGODB_URL)
+  .connect(devUrl)
   .then((result) => {
     console.log("connected");
 

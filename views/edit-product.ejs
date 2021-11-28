@@ -39,7 +39,11 @@
         </div>
         <div class="card p-3 px-5">
           <h4 class="uppercase text-purple-300">Edit Product:</h4>
-          <form action="/admin/edit-product/<%= product.id %> " method="post">
+          <form
+            action="/admin/edit-product/<%= product.id %> "
+            method="post"
+            enctype="multipart/form-data"
+          >
             <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
             <input
               type="text"
