@@ -17,9 +17,8 @@ const shopRoutes = require("./routes/shopRoutes");
 const authRoutes = require("./routes/auth");
 const errorController = require("./controllers/errorController");
 
-const MONGODB_URL =
-  "mongodb+srv://ryanmwakio:ngs%40ngo1620@cluster0.temth.mongodb.net/eshop?retryWrites=true&w=majority";
-const devUrl = "mongodb://127.0.0.1:27017/eshop";
+const MONGODB_URL = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.temth.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`;
+//const devUrl = "mongodb://127.0.0.1:27017/eshop";
 const PORT = process.env.PORT || 8080;
 
 const app = express();
@@ -129,7 +128,7 @@ mongoose
     console.log("connected");
 
     app.listen(PORT, () => {
-      console.log(`server running at http://127.0.0.1:${PORT}`);
+      console.log(`server running at ${process.env.HOST_URL}`);
     });
   })
   .catch((err) => {
