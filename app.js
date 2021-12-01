@@ -11,6 +11,7 @@ const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 require("dotenv").config();
 const cloudinary = require("cloudinary").v2;
+const helmet = require("helmet");
 
 const adminRoutes = require("./routes/adminRoutes");
 const shopRoutes = require("./routes/shopRoutes");
@@ -24,6 +25,7 @@ const PORT = process.env.PORT || 8080;
 const app = express();
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "images")));
+// app.use(helmet());
 
 const store = new MongoDbStore({
   uri: MONGODB_URL,
