@@ -1,0 +1,3 @@
+const deleteProduct = () => {
+  alert("clicked");
+};

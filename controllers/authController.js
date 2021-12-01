@@ -134,13 +134,13 @@ exports.postRegister = (req, res, next) => {
               const transporter = nodemailer.createTransport({
                 service: "hotmail",
                 auth: {
-                  user: "ryanmwakio6@outlook.com",
-                  pass: "HT7$gQ_k925",
+                  user: `${process.env.HOTMAIL_EMAIL}`,
+                  pass: `${process.env.HOTMAIL_PASS}`,
                 },
               });
 
               const options = {
-                from: "ryanmwakio6@outlook.com",
+                from: `${process.env.HOTMAIL_EMAIL}`,
                 to: email,
                 subject: "eshop registration confimation",
                 text: `Hello ${name} welcome to E-Shop, all shoping at your fingertips.`,
@@ -249,13 +249,13 @@ exports.postReset = (req, res, next) => {
         const transporter = nodemailer.createTransport({
           service: "hotmail",
           auth: {
-            user: "ryanmwakio6@outlook.com",
-            pass: "HT7$gQ_k925",
+            user: `${process.env.HOTMAIL_EMAIL}`,
+            pass: `${process.env.HOTMAIL_PASS}`,
           },
         });
 
         const options = {
-          from: "ryanmwakio6@outlook.com",
+          from: `${process.env.HOTMAIL_EMAIL}`,
           to: email,
           subject: "eshop password reset",
           text: `Password reset email`,

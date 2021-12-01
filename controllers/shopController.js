@@ -10,14 +10,31 @@ const Order = require("../models/Order");
 const serverError = require("../middleware/server-error");
 const rootDir = require("../util/path");
 
+const ITEMS_PER_PAGE = 8;
+
 exports.getAllProducts = (req, res, next) => {
+  const page = Number(req.query.page) || 1;
+  let totalItems;
+
   Product.find()
-    .populate("userId")
+    .countDocuments()
+    .then((numProducts) => {
+      totalItems = numProducts;
+      return Product.find()
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE);
+    })
     .then((results) => {
       res.render("shop", {
         title: "E-SHOP",
         products: results,
         path: "/",
+        currentPage: page,
+        hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
       });
     })
     .catch((err) => {
@@ -406,4 +423,65 @@ exports.getInvoice = (req, res, next) => {
     .catch((err) => {
       serverError(err, next);
     });
+};
+
+//stk MPESA
+exports.getStk = (req, res, next) => {
+  let endpoint = "";
+  let auth = "Bearer " + req.access_token;
+
+  let date = new Date();
+  const timestamp =
+    date.getFullYear() +
+    "" +
+    "" +
+    date.getMonth() +
+    "" +
+    "" +
+    date.getDate() +
+    "" +
+    "" +
+    date.getHours() +
+    "" +
+    "" +
+    date.getMinutes() +
+    "" +
+    "" +
+    date.getSeconds();
+  const password = new Buffer.from(
+    "174379" +
+      "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919" +
+      timestamp
+  ).toString("base64");
+
+  request(
+    {
+      url: endpoint,
+      method: "POST",
+      headers: {
+        Authorization: auth,
+      },
+      json: {
+        ShortCode: "600383",
+        BusinessShortCode: "174379",
+        Password: password,
+        Timestamp: timestamp,
+        TransactionType: "CustomerPayBillOnline",
+        Amount: "1",
+        PartyA: "254716437799",
+        PartyB: "174379",
+        PhoneNumber: "254716437799",
+        CallBackURL: "http://197.248.86.122:801/stk_callback",
+        AccountReference: "Test",
+        TransactionDesc: "TestPay",
+      },
+    },
+    function (error, response, body) {
+      if (error) {
+        console.error(error);
+      }
+      console.log(body);
+      res.status(200).json(body);
+    }
+  );
 };

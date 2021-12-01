@@ -8,9 +8,53 @@
 }
 
 .navbar-active {
-  @apply bg-purple-700 text-sm text-white   capitalize p-2;
+  @apply py-4 px-2 font-semibold text-purple-700 border-b-4 border-purple-700;
 }
 
 .navlink {
-  @apply bg-white  text-purple-700 text-sm border border-purple-700 p-2  capitalize hover:bg-purple-700 hover:text-white;
+  @apply py-4 px-2 font-semibold text-gray-500 border-b-4 border-white;
+}
+
+.navlink:hover {
+  @apply py-4 px-2 font-semibold text-purple-700 border-b-4 border-purple-700;
+}
+
+.nav-button {
+  @apply py-2 px-2 font-medium text-purple-700 rounded-sm transition duration-300 border border-purple-700 bg-white;
+}
+
+.nav-button:hover {
+  @apply py-2 px-2 font-medium text-white rounded-sm transition duration-300 border border-purple-700 bg-purple-700;
+}
+
+.nav-button-active {
+  @apply py-2 px-2 font-medium text-white rounded-sm transition duration-300 bg-purple-700 border-purple-700;
+}
+
+.pagination-active {
+  @apply bg-purple-700 text-white;
+}
+
+body {
+  font-size: 14px !important;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #8b5cf6;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #4c1d95;
 }

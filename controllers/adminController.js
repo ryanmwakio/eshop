@@ -2,6 +2,8 @@ const { unlink } = require("fs");
 const path = require("path");
 
 const moment = require("moment");
+require("dotenv").config();
+const cloudinary = require("cloudinary").v2;
 
 const Product = require("../models/Product");
 const serverError = require("../middleware/server-error");
@@ -46,22 +48,31 @@ exports.postAddProduct = (req, res, next) => {
     // const imageUrl = image.path;
     const imageUrl = image.filename;
 
-    const product = new Product({
-      title: title,
-      imageUrl: imageUrl,
-      price: price,
-      description: description,
-      userId: req.user,
-    });
+    cloudinary.uploader.upload(
+      path.join(rootDir, "images", imageUrl),
+      (err, result) => {
+        if (err) {
+          serverError(err, next);
+        }
 
-    product
-      .save()
-      .then((result) => {
-        res.redirect("/");
-      })
-      .catch((err) => {
-        serverError(err, next);
-      });
+        const product = new Product({
+          title: title,
+          imageUrl: result.url,
+          price: price,
+          description: description,
+          userId: req.user,
+        });
+
+        product
+          .save()
+          .then((result) => {
+            res.redirect("/");
+          })
+          .catch((err) => {
+            serverError(err, next);
+          });
+      }
+    );
   }
 };
 
@@ -106,12 +117,20 @@ exports.postEditProduct = (req, res, next) => {
     .then((product) => {
       product.title = updatedTitle;
       if (image) {
+        //if image has been updated
+        cloudinary.uploader.upload(
+          path.join(rootDir, "images", image.filename),
+          (err, result) => {
+            if (err) {
+              serverError(err, next);
+            }
+            product.imageUrl = result.url;
+          }
+        );
         // const filePath = path.join(rootDir, "images", product.imageUrl);
         // unlink(filePath, (err) => {
         //   if (err) throw err;
         // });
-
-        product.imageUrl = image.filename;
       }
       product.price = updatedPrice;
       product.description = updatedDescription;
@@ -133,10 +152,15 @@ exports.postDeleteProduct = (req, res, next) => {
 
   Product.findById(prodId)
     .then((product) => {
-      const filePath = path.join(rootDir, "images", product.imageUrl);
+      //const filePath = path.join(rootDir, "images", product.imageUrl);
 
-      unlink(filePath, (err) => {
-        if (err) throw err;
+      // unlink(filePath, (err) => {
+      //   if (err) throw err;
+      // });
+      cloudinary.uploader.destroy(product.imageUrl, (err, result) => {
+        if (err) {
+          throw err;
+        }
       });
     })
     .then(() => {

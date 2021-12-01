@@ -9,6 +9,8 @@ const csrf = require("csurf");
 const flash = require("connect-flash");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
+require("dotenv").config();
+const cloudinary = require("cloudinary").v2;
 
 const adminRoutes = require("./routes/adminRoutes");
 const shopRoutes = require("./routes/shopRoutes");
@@ -18,13 +20,14 @@ const errorController = require("./controllers/errorController");
 const MONGODB_URL =
   "mongodb+srv://ryanmwakio:ngs%40ngo1620@cluster0.temth.mongodb.net/eshop?retryWrites=true&w=majority";
 const devUrl = "mongodb://127.0.0.1:27017/eshop";
+const PORT = process.env.PORT || 8080;
 
 const app = express();
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "images")));
 
 const store = new MongoDbStore({
-  uri: devUrl,
+  uri: MONGODB_URL,
   collection: "sessions",
 });
 const csrfProtection = csrf();
@@ -36,6 +39,7 @@ const fileStorage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     let fileUniqueName = uuidv4();
+    //get extension
     let extensionArray = file.originalname.split(".");
     let extension = extensionArray[extensionArray.length - 1];
 
@@ -63,6 +67,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
 );
+
+//cloudinary config
+cloudinary.config({
+  cloud_name: `${process.env.CLOUDINARY_NAME}`,
+  api_key: `${process.env.CLOUDINARY_API_KEY}`,
+  api_secret: `${process.env.CLOUDINARY_API_SECRET}`,
+});
+//cloudinary config end
 
 app.use(
   session({
@@ -112,12 +124,12 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect(devUrl)
+  .connect(MONGODB_URL)
   .then((result) => {
     console.log("connected");
 
-    app.listen(8080, () => {
-      console.log("server running at http://127.0.0.1:8080");
+    app.listen(PORT, () => {
+      console.log(`server running at http://127.0.0.1:${PORT}`);
     });
   })
   .catch((err) => {

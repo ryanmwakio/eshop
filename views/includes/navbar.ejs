@@ -1,180 +1,254 @@
 <header>
-  <!-- navbar -->
-  <nav
-    class="
-      flex
-      justify-between
-      bg-white
-      text-white
-      w-screen
-      shadow-lg
-      border-b border-purple-700
-      space-x-1
-    "
-  >
-    <div class="px-5 xl:px-12 py-6 flex w-full items-center">
-      <a class="text-3xl font-bold font-heading text-purple-700" href="/">
-        <!-- <img class="h-9" src="logo.png" alt="logo"> -->
-        E-Shop.
-      </a>
-      <!-- Nav Links -->
-      <ul
-        class="hidden md:flex px-4 mx-auto font-semibold font-heading space-x-3"
-      >
-        <li>
-          <a class="<%= path==='/' ? 'navbar-active' : 'navlink' %>" href="/"
+  <!-- Navbar goes here -->
+
+  <nav class="bg-white shadow-lg">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex justify-between">
+        <div class="flex space-x-7">
+          <div>
+            <!-- Website Logo -->
+            <a href="/" class="flex items-center py-4 px-2">
+              <img src="/images/logo.png" alt="Logo" class="h-8 w-8 mr-2" />
+              <span class="font-semibold text-gray-500 text-lg">E-Shop.</span>
+            </a>
+          </div>
+          <!-- Primary Navbar items -->
+          <div class="hidden md:flex items-center space-x-1">
+            <a href="/" class="<%= path==='/' ? 'navbar-active':'navlink' %>"
+              >Home</a
+            >
+            <a
+              href="/orders"
+              class="<%= path==='/orders' ? 'navbar-active':'navlink' %>"
+              >Orders</a
+            >
+            <% if(isAuthenticated&&role===1){ %>
+            <a
+              href="/admin/add-product"
+              class="
+                <%=
+                path==='/admin/add-product'
+                ?
+                'navbar-active':'navlink'
+                %>
+              "
+              >Add Product</a
+            >
+            <% } %> <% if(isAuthenticated){ %>
+            <a
+              href="/cart"
+              class="<%= path==='/cart' ? 'navbar-active':'navlink' %>"
+              >Cart</a
+            >
+            <% } %>
+          </div>
+        </div>
+        <!-- Secondary Navbar items -->
+        <div class="hidden md:flex items-center space-x-3">
+          <% if(!isAuthenticated){ %>
+          <a
+            href="/login"
+            class="<%= path==='/login' ? 'nav-button-active' : 'nav-button' %>"
+            >Log In</a
+          >
+          <a
+            href="/register"
+            class="
+              <%=
+              path==='/register'
+              ?
+              'nav-button-active'
+              :
+              'nav-button'
+              %>
+            "
+            >Sign Up</a
+          >
+          <% } %> <% if(isAuthenticated){ %>
+          <div>
+            <a
+              href=""
+              class="text-purple-700 text-sm p-1 border border-purple-700"
+              ><%= username %>
+            </a>
+          </div>
+          <form action="/logout" method="post" class="flex items-center">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <button type="submit" class="cursor-pointer" title="logout">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 text-purple-700"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+          </form>
+          <% } %>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden flex items-center">
+          <button class="outline-none mobile-menu-button">
+            <svg
+              class="w-6 h-6 text-gray-500 hover:text-purple-700"
+              x-show="!showMenu"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- mobile menu -->
+    <div class="hidden mobile-menu">
+      <ul class="">
+        <li class="active">
+          <a
+            href="/"
+            class="
+              block
+              text-sm
+              px-2
+              py-4
+              text-white
+              bg-purple-700
+              font-semibold
+            "
             >Home</a
           >
         </li>
         <li>
           <a
-            class="<%= path==='/orders' ? 'navbar-active' : 'navlink' %>"
-            href="/orders"
+            href="#services"
+            class="
+              block
+              text-sm
+              px-2
+              py-4
+              hover:bg-purple-700
+              transition
+              duration-300
+            "
             >Orders</a
           >
         </li>
         <% if(isAuthenticated&&role===1){ %>
         <li>
           <a
-            class="
-              <%=
-              path==='/admin/add-product'
-              ?
-              'navbar-active'
-              :
-              'navlink'
-              %>
-            "
             href="/admin/add-product"
+            class="
+              block
+              text-sm
+              px-2
+              py-4
+              hover:bg-purple-700
+              transition
+              duration-300
+            "
             >Add Product</a
           >
         </li>
-        <% } %>
-      </ul>
-      <!-- Header Icons -->
-      <div class="hidden xl:flex space-x-5 items-center">
-        <% if(isAuthenticated){ %>
-        <a
-          class="flex items-center hover:text-purple-400 text-purple-700"
-          href="/cart"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-            />
-          </svg>
-          <span class="flex absolute -mt-5 ml-4">
-            <span
-              class="
-                animate-ping
-                absolute
-                inline-flex
-                h-3
-                w-3
-                rounded-full
-                bg-pink-400
-                opacity-75
-              "
-            ></span>
-            <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500">
-            </span>
-          </span>
-        </a>
-        <% } %>
-        <!-- Sign In / Register      -->
-        <% if(!isAuthenticated){ %>
-        <a
-          class="flex items-center hover:text-purple-400 text-purple-700"
-          href="/login"
-          >signin</a
-        >
-        <% } %> <% if(!isAuthenticated){ %>
-        <a href="/register" class="text-purple-700">signup</a>
         <% } %> <% if(isAuthenticated){ %>
-        <div>
+        <li>
           <a
-            href=""
-            class="text-purple-700 text-sm p-1 border border-purple-700"
-            ><%= username %>
-          </a>
-        </div>
-        <form action="/logout" method="post" class="flex items-center">
-          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-          <button type="submit" class="cursor-pointer" title="logout">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 text-purple-700"
-              viewBox="0 0 20 20"
-              fill="currentColor"
+            href="/cart"
+            class="
+              block
+              text-sm
+              px-2
+              py-4
+              hover:bg-purple-700
+              transition
+              duration-300
+            "
+            >Cart</a
+          >
+        </li>
+        <% } %> <% if(isAuthenticated){ %>
+        <div class="grid grid-cols-5 mb-3">
+          <div>
+            <a
+              href=""
+              class="
+                text-purple-700 text-sm
+                p-1
+                border border-purple-700
+                ml-2
+                inline-block
+                mb-3
+              "
+              ><%= username %>
+            </a>
+          </div>
+          <form action="/logout" method="post" class="inline-block">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <button type="submit" class="cursor-pointer" title="logout">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 text-purple-700"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+          </form>
+
+          <% } %> <% if(!isAuthenticated){ %>
+          <div class="ml-2 pb-5">
+            <a
+              href="/login"
+              class="
+                <%=
+                path==='/login'
+                ?
+                'nav-button-active'
+                :
+                'nav-button'
+                %>
+              "
+              >Log In</a
             >
-              <path
-                fill-rule="evenodd"
-                d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </button>
-        </form>
-        <% } %>
-      </div>
+            <a
+              href="/register"
+              class="
+                <%=
+                path==='/register'
+                ?
+                'nav-button-active'
+                :
+                'nav-button'
+                %>
+              "
+              >Sign Up</a
+            >
+          </div>
+          <% } %>
+        </div>
+      </ul>
     </div>
-    <!-- Responsive navbar -->
-    <a class="xl:hidden flex mr-6 items-center" href="#">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6 hover:text-purple-400 text-purple-700"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-        />
-      </svg>
-      <span class="flex absolute -mt-5 ml-4">
-        <span
-          class="
-            animate-ping
-            absolute
-            inline-flex
-            h-3
-            w-3
-            rounded-full
-            bg-pink-400
-            opacity-75
-          "
-        ></span>
-        <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500">
-        </span>
-      </span>
-    </a>
-    <a class="navbar-burger self-center mr-12 xl:hidden" href="#">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6 hover:text-purple-400 text-purple-700"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"
-        />
-      </svg>
-    </a>
+    <script>
+      const btn = document.querySelector("button.mobile-menu-button");
+      const menu = document.querySelector(".mobile-menu");
+
+      btn.addEventListener("click", () => {
+        menu.classList.toggle("hidden");
+      });
+    </script>
   </nav>
 </header>

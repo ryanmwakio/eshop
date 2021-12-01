@@ -10,7 +10,7 @@
   <body class="bg-white">
     <%- include('includes/navbar') %>
 
-    <main class="mx-12 my-2">
+    <main class="mx-4 md:mx-12  my-2">
       <% if(products.length>0){ %>
       <h1 class="text-purple-700 m-3 uppercase">All Products</h1>
       <div
@@ -19,7 +19,7 @@
         <% products.map(product=>{ %>
         <div class="card">
           <img
-            src="/<%= product.imageUrl %> "
+            src="<%= product.imageUrl %> "
             alt="product image"
             class="overflow-hidden cursor-move h-48 w-screen object-cover"
           />
@@ -80,6 +80,24 @@
           </svg>
         </div>
         <% } %>
+      </div>
+      <section class="my-6 mx-4 w-full flex justify-center align-middle">
+        <div>
+          <% if(currentPage!==1&&previousPage!==1){ %> 
+          <a href="/?page=1" class="text-sm px-2 py-1 m-1 bg-white border border-purple-700 text-purple-700  hover:bg-purple-700 hover:text-white">1</a>
+          <% } %> 
+          <% if(hasPreviousPage){ %> 
+          <a href="/?page=<%= previousPage %> " class="text-sm px-2 py-1 m-1 bg-white border border-purple-700 text-purple-700  hover:bg-purple-700 hover:text-white"><%= previousPage %> </a>
+          <% } %>
+          <a href="/?page=<%= currentPage %> " class="text-sm px-2 py-1 m-1 bg-white border border-purple-700 text-purple-700  hover:bg-purple-700 hover:text-white pagination-active"><%= currentPage %> </a>
+          
+          <% if(hasNextPage){ %> 
+          <a href="/?page=<%= nextPage %> " class="text-sm px-2 py-1 m-1 bg-white border border-purple-700 text-purple-700  hover:bg-purple-700 hover:text-white"><%= nextPage %> </a>
+          <% } %>
+          <% if(lastPage!==currentPage&&nextPage!==lastPage){ %> 
+          <a href="/?page=<%= lastPage %> " class="text-sm px-2 py-1 m-1 bg-white border border-purple-700 text-purple-700  hover:bg-purple-700 hover:text-white"><%= lastPage %> </a> 
+          <% } %> 
+        </div>
       </div>
     </main>
   </body>

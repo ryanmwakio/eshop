@@ -23,4 +23,6 @@ router.get("/clear-orders", isAuth, shopController.clearOrders);
 
 router.get("/orders/:orderId", isAuth, shopController.getInvoice);
 
+router.get("/stk", shopController.getStk);
+
 module.exports = router;
