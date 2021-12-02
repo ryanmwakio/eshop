@@ -22,7 +22,7 @@ const authRoutes = require("./routes/auth");
 const errorController = require("./controllers/errorController");
 
 const MONGODB_URL = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.temth.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`;
-//const devUrl = "mongodb://127.0.0.1:27017/eshop";
+
 const PORT = process.env.PORT || 8080;
 
 const app = express();
