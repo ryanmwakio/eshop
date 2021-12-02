@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require("fs");
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -13,6 +14,7 @@ require("dotenv").config();
 const cloudinary = require("cloudinary").v2;
 const helmet = require("helmet");
 const compression = require("compression");
+const morgan = require("morgan");
 
 const adminRoutes = require("./routes/adminRoutes");
 const shopRoutes = require("./routes/shopRoutes");
