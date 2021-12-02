@@ -12,6 +12,7 @@ const { v4: uuidv4 } = require("uuid");
 require("dotenv").config();
 const cloudinary = require("cloudinary").v2;
 const helmet = require("helmet");
+const compression = require("compression");
 
 const adminRoutes = require("./routes/adminRoutes");
 const shopRoutes = require("./routes/shopRoutes");
@@ -26,6 +27,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "images")));
 // app.use(helmet());
+app.use(compression());
 
 const store = new MongoDbStore({
   uri: MONGODB_URL,
