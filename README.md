@@ -51,7 +51,7 @@ eshop
 |   +   include (all the view partials that are reusable)
 |   |   navbar.ejs
 |
-+   public (interface exposed to public)
++   public (folder exposed to public)
 |   +   css
 |   +   images
 |   +   js (client side js)
