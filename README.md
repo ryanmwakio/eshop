@@ -99,4 +99,4 @@ npm run server
 
 ---
 
-<img src="https://giphy.com/clips/dexter-episode-1-showtime-season-8-1OtGLpxasptyJBM26C"/>
+<img src="https://media4.giphy.com/media/l2YWxUulKOk8EM4gg/giphy.gif"/>
