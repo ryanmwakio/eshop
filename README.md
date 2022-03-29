@@ -1,6 +1,13 @@
 # eshop
 
-eshop, an eccomerce platform for selling and buying goods ready with m-pesa intergration.
+![eshop image](./for_docs/cover.png)
+![eshop image](./for_docs/add.png)
+eshop, an eccomerce platform for selling and buying goods ready with m-pesa intergration and invoice generation.
+
+##### sample invoice
+
+![invoice](./for_docs/invoice.png)
+[pdf invoice](./for_docs/invoice-623adee439435786c048c1ab.pdf)
 
 ### features include:
 
