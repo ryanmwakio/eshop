@@ -23,7 +23,7 @@ we are using the (MVC) paradigm for developing this software. This facilitates s
 
 model - database layer<br>
 view - the client side of the app<br>
-controller - all the business logic (the middleman)<br>
+controller - all the business logic (the middle layer)<br>
 
 \*for the views we are using ejs<br> \* for database we are using mongodb
 
